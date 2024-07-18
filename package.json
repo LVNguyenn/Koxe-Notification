@@ -1,0 +1,21 @@
+{
+  "name": "push-notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^12.2.0",
+    "node-cron": "^3.0.3",
+    "pg": "^8.12.0",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.11"
+  }
+}
