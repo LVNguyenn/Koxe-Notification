@@ -29,6 +29,8 @@ createConnection()
         relations: ["user"],
       });
 
+      console.log(appointments);
+
       appointments = appointments.map((appointment: any) => ({
         ...appointment,
         notificationTime: moment.tz(
