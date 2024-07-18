@@ -29,7 +29,7 @@ createConnection()
         relations: ["user"],
       });
 
-      console.log(appointments);
+      console.log("1", appointments);
 
       appointments = appointments.map((appointment: any) => ({
         ...appointment,
@@ -39,11 +39,13 @@ createConnection()
         ),
       }));
 
+      console.log("2", appointments);
+
       appointments = appointments.filter((appointment) => {
         return now.isSame(appointment.notificationTime);
       });
 
-      console.log(appointments);
+      console.log("3", appointments);
       appointments.forEach(async (appointment) => {
         if (appointment.user.androidFcmToken !== null) {
           const message = {
