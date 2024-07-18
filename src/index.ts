@@ -5,6 +5,7 @@ import * as cron from "node-cron";
 
 createConnection()
   .then(async (connection) => {
+    console.log(new Date().toString());
     const appointmentRepository = connection.getRepository(Appointment);
     cron.schedule("*/30 * * * *", async () => {
       const now = new Date();
