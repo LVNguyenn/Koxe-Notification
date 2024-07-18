@@ -2,6 +2,7 @@ import { createConnection, LessThanOrEqual } from "typeorm";
 import { Appointment } from "./entity/Appointment";
 import { messaging } from "../firebaseConfig";
 import * as cron from "node-cron";
+const moment = require("moment-timezone");
 
 import express from "express";
 const app = express();
@@ -17,17 +18,30 @@ app.listen(port, () => {
 
 createConnection()
   .then(async (connection) => {
-    console.log(new Date().toString());
     const appointmentRepository = connection.getRepository(Appointment);
-    cron.schedule("*/30 * * * *", async () => {
-      const now = new Date();
-      const appointments = await appointmentRepository.find({
+    cron.schedule("* * * * *", async () => {
+      const now = moment.tz("Asia/Ho_Chi_Minh").startOf("minute");
+      console.log(now);
+      let appointments = await appointmentRepository.find({
         where: {
-          notificationTime: LessThanOrEqual(now),
           notificationSent: false,
         },
         relations: ["user"],
       });
+
+      appointments = appointments.map((appointment: any) => ({
+        ...appointment,
+        notificationTime: moment.tz(
+          appointment.notificationTime,
+          "Asia/Ho_Chi_Minh"
+        ),
+      }));
+
+      appointments = appointments.filter((appointment) => {
+        return now.isSame(appointment.notificationTime);
+      });
+
+      console.log(appointments);
       appointments.forEach(async (appointment) => {
         if (appointment.user.androidFcmToken !== null) {
           const message = {
