@@ -22,11 +22,22 @@ createConnection()
     cron.schedule("* * * * *", async () => {
       const now = moment.tz("Asia/Ho_Chi_Minh").startOf("minute");
       console.log(now);
-      let appointments = await appointmentRepository.find({
+      let appointments: any = await appointmentRepository.find({
         where: {
           notificationSent: false,
         },
         relations: ["user"],
+      });
+
+      appointments = appointments.map((appointment: any) => {
+        const notificationTime = appointment.notificationTime.setHours(
+          appointment.notificationTime.getHours() - 7
+        );
+
+        return {
+          ...appointment,
+          notificationTime: notificationTime.toISOString(),
+        };
       });
 
       console.log("1", appointments);
@@ -41,12 +52,15 @@ createConnection()
 
       console.log("2", appointments);
 
-      appointments = appointments.filter((appointment) => {
+      //Moment<2024-07-18T21:31:00+07:00>
+      //Moment<2024-07-19T04:31:00+07:00>
+
+      appointments = appointments.filter((appointment: any) => {
         return now.isSame(appointment.notificationTime);
       });
 
       console.log("3", appointments);
-      appointments.forEach(async (appointment) => {
+      appointments.forEach(async (appointment: any) => {
         if (appointment.user.androidFcmToken !== null) {
           const message = {
             notification: {
