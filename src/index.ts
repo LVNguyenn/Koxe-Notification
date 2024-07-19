@@ -20,7 +20,7 @@ createConnection()
   .then(async (connection) => {
     const appointmentRepository = connection.getRepository(Appointment);
     cron.schedule("* * * * *", async () => {
-      const now = moment.tz("Greenwich").startOf("minute");
+      const now = moment.tz("Pacific/Kiritimati").startOf("minute");
       console.log(now);
       let appointments: any = await appointmentRepository.find({
         where: {
