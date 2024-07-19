@@ -19,7 +19,7 @@ app.listen(port, () => {
 createConnection()
   .then(async (connection) => {
     const appointmentRepository = connection.getRepository(Appointment);
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("*/30 * * * *", async () => {
       let now = moment.tz("Pacific/Kiritimati").startOf("minute");
       const timeString = now.format();
       const updatedTimeString = timeString.replace(
@@ -35,16 +35,6 @@ createConnection()
         relations: ["user"],
       });
 
-      // appointments = appointments.map((appointment: any) => {
-      //   const notificationTime = new Date(appointment.notificationTime);
-      //   notificationTime.setHours(notificationTime.getHours() - 7);
-
-      //   return {
-      //     ...appointment,
-      //     notificationTime: notificationTime.toISOString(),
-      //   };
-      // });
-
       console.log("1", appointments);
 
       appointments = appointments.map((appointment: any) => ({
@@ -56,9 +46,6 @@ createConnection()
       }));
 
       console.log("2", appointments);
-
-      //Moment<2024-07-18T21:31:00+07:00>
-      //Moment<2024-07-19T04:31:00+07:00>
 
       appointments = appointments.filter((appointment: any) => {
         return now.isSame(appointment.notificationTime);
