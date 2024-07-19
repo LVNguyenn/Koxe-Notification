@@ -29,16 +29,15 @@ createConnection()
         relations: ["user"],
       });
 
-      appointments = appointments.map((appointment: any) => {
-        const notificationTime = appointment.notificationTime.setHours(
-          appointment.notificationTime.getHours() - 7
-        );
+      // appointments = appointments.map((appointment: any) => {
+      //   const notificationTime = new Date(appointment.notificationTime);
+      //   notificationTime.setHours(notificationTime.getHours() - 7);
 
-        return {
-          ...appointment,
-          notificationTime: notificationTime.toISOString(),
-        };
-      });
+      //   return {
+      //     ...appointment,
+      //     notificationTime: notificationTime.toISOString(),
+      //   };
+      // });
 
       console.log("1", appointments);
 
